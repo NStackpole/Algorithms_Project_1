@@ -162,6 +162,7 @@ bool operator < (binary_integer const& a, binary_integer const& b)
 	return !(a>=b);
 }
 
+//This  function should run in O(n) time where n is the 2048
 bool operator >(binary_integer const& a, binary_integer const& b)
 {
 	for(int i = 2047; i>=0; --i)
