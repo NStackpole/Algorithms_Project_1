@@ -3,13 +3,13 @@
 //Default Constructor
 binary_integer::binary_integer()
 {
-    bits = std::vector<int>(2048, 0);
+	bits = std::vector<int>(2048, 0);
 }
 
 
 binary_integer::binary_integer(binary_integer const& x)
 {
-    bits = x.bits;
+	bits = x.bits;
 }
 
 binary_integer::binary_integer(unsigned x)
@@ -20,18 +20,18 @@ binary_integer::binary_integer(unsigned x)
 //
 std::vector<int> binary_integer::convert_to_binary(unsigned value)
 {
-    std::vector<int> ans(2048, 0);
+	std::vector<int> ans(2048, 0);
 	int count = 0;
 
-    while(value != 1)
-    {
+	while(value != 1)
+	{
 		ans[count] = (value%2);
 		value /= 2;
 		count++;
-    }
+	}
 
 	ans[count] = (1%2);
-    return ans;
+	return ans;
 }
 
 //Runs in O(n) time since it is printing n (size of list) digits.
@@ -59,7 +59,7 @@ void binary_integer::printBitsWithZeroes()
 
 	for(int i = bits.size() -1; i>=0; i--)
 	{
-			std::cout<<bits[i];
+		std::cout<<bits[i];
 	}
 
 	std::cout<<"\n";
@@ -73,7 +73,7 @@ void binary_integer::printDecimal()
 		if(bits[i] == 1)
 			answer+= bits[i] * pow(2,i);
 	}
-	
+
 	std::cout<<answer<<"\n";
 }
 
@@ -97,7 +97,7 @@ binary_integer& binary_integer::operator = (binary_integer const& R)
 //Arithmetic Operators' overloads
 binary_integer& binary_integer::operator += (binary_integer const& R)
 {
-	
+
 	int carry = 0;
 	std::vector<int> sum(2,0);
 
@@ -107,13 +107,14 @@ binary_integer& binary_integer::operator += (binary_integer const& R)
 		bits[i] = sum[0];
 		carry = sum[1];
 	}
+	
 	return *this;
 }
 
 //returns an array of two ints in this format {sum, carry}
 std::vector<int> binary_integer::addBits(int bit_a, int bit_b, int carry)
 {
-	
+
 	std::vector<int> ans(2,0);
 
 	if((bit_a + bit_b + carry) == 3)
@@ -138,7 +139,7 @@ binary_integer& binary_integer::operator << (unsigned rhs)
 		{
 			temp[i] = bits[i-1];
 		}
-		bits = temp;
+	bits = temp;
 	}
 }
 
@@ -151,14 +152,14 @@ binary_integer& binary_integer::operator >> (unsigned rhs)
 		{
 			temp[i] = bits[i+1];
 		}
-		bits = temp;
+	bits = temp;
 	}
 }
 
 
 binary_integer& binary_integer::operator -= (binary_integer const& R)
 {
-	
+
 	return *this;
 }
 
@@ -170,8 +171,8 @@ binary_integer& binary_integer::operator *=(binary_integer const& R)
 		{
 			
 		}
-		
-			
+
+	
 	}
 
 	return *this;
@@ -179,7 +180,7 @@ binary_integer& binary_integer::operator *=(binary_integer const& R)
 
 binary_integer& binary_integer::operator /=(binary_integer const& R)
 {
-	
+
 	return *this;
 }
 
@@ -200,7 +201,6 @@ binary_integer operator - (binary_integer a, binary_integer b)
 
 binary_integer operator *(binary_integer a, binary_integer b)
 {
-
 	return a *= b;
 }
 
@@ -211,7 +211,7 @@ std::istream& operator >> (std::istream& inputstream,  binary_integer& input)
 	input.bits = std::vector<int>(2048, 0);
 	for(int i = 0; i<5; ++i)
 		inputstream >> input.bits[i];
-	
+
 }
 
 //Boolean Operators' overloads
@@ -227,7 +227,6 @@ bool operator != (binary_integer const& a, binary_integer const& b)
 
 bool operator < (binary_integer const& a, binary_integer const& b)
 {
-	
 	return !(a>=b);
 }
 
@@ -237,7 +236,7 @@ bool operator >(binary_integer const& a, binary_integer const& b)
 	for(int i = 2047; i>=0; --i)
 	{
 		if(a.bits[i] > b.bits[i])
-			return true;
+		return true;
 	}
 
 	return false;
@@ -252,13 +251,13 @@ bool operator <= (binary_integer const& a, binary_integer const& b)
 
 bool operator >= (binary_integer const& a, binary_integer const& b)
 {
-	
+
 	if(a == b)
 		return true;
 	for(int i = 2047; i>=0; --i)
 	{
 		if(a.bits[i] > b.bits[i])
-			return true;
+		return true;
 	}
 
 	return false;
