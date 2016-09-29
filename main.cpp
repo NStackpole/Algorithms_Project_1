@@ -56,6 +56,49 @@ int main()
     else
         std::cout<<"Test2 is Not Greater Than Test3\n";
 
+    std::cout<<"\n";
+
+    std::cout<<Test2;
+    Test2.printDecimal();
+
+    Test2<<1;
+    std::cout<<"\n";
+
+    std::cout<<Test2;
+    Test2.printDecimal();
+
+    Test2>>1;
+    std::cout<<"\n";
+
+    std::cout<<Test2;
+    Test2.printDecimal();
+
+    Test2.twice();
+    std::cout<<"\n";
+
+    std::cout<<Test2;
+    Test2.printDecimal();
+
+    Test2.half();
+    std::cout<<"\n";
+
+    std::cout<<Test2;
+    Test2.printDecimal();
+
+    //std::cin>>Test2;
+   
+    
+
+
+    //std::cout<<"\n";
+
+//    Test2 << 2;
+   
+    
+
+  //  Test2.printBits();
+    //Test2.printDecimal();
+
     
 
     return 0;

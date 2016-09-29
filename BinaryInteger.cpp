@@ -53,6 +53,18 @@ void binary_integer::printBits()
 	std::cout<<"\n";
 }
 
+//Runs in O(n) time since it is printing n (size of list) digits.
+void binary_integer::printBitsWithZeroes()
+{
+
+	for(int i = bits.size() -1; i>=0; i--)
+	{
+			std::cout<<bits[i];
+	}
+
+	std::cout<<"\n";
+}
+
 void binary_integer::printDecimal()
 {
 	int answer =0;
@@ -63,6 +75,16 @@ void binary_integer::printDecimal()
 	}
 	
 	std::cout<<answer<<"\n";
+}
+
+void binary_integer::twice()
+{
+	*this<<1;
+}
+
+void binary_integer::half()
+{
+	*this>>1;
 }
 
 //Overloading the equals assignment operator
@@ -106,6 +128,34 @@ std::vector<int> binary_integer::addBits(int bit_a, int bit_b, int carry)
 	return ans;
 }
 
+
+binary_integer& binary_integer::operator << (unsigned rhs)
+{
+	for(int j = 0; j<rhs;++j)
+	{
+		std::vector<int> temp (2048, 0);
+		for(int i = 1; i<bits.size(); ++i)
+		{
+			temp[i] = bits[i-1];
+		}
+		bits = temp;
+	}
+}
+
+binary_integer& binary_integer::operator >> (unsigned rhs)
+{
+	for(int j = 0; j<rhs;++j)
+	{
+		std::vector<int> temp (2048, 0);
+		for(int i = 2046; i>=0; --i)
+		{
+			temp[i] = bits[i+1];
+		}
+		bits = temp;
+	}
+}
+
+
 binary_integer& binary_integer::operator -= (binary_integer const& R)
 {
 	
@@ -114,7 +164,16 @@ binary_integer& binary_integer::operator -= (binary_integer const& R)
 
 binary_integer& binary_integer::operator *=(binary_integer const& R)
 {
-	
+	for(int i = 0; i<bits.size(); ++i)
+	{
+		if(R.bits[i]%2 == 0)
+		{
+			
+		}
+		
+			
+	}
+
 	return *this;
 }
 
@@ -143,6 +202,16 @@ binary_integer operator *(binary_integer a, binary_integer b)
 {
 
 	return a *= b;
+}
+
+
+
+std::istream& operator >> (std::istream& inputstream,  binary_integer& input)
+{
+	input.bits = std::vector<int>(2048, 0);
+	for(int i = 0; i<5; ++i)
+		inputstream >> input.bits[i];
+	
 }
 
 //Boolean Operators' overloads
