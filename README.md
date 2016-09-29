@@ -1,5 +1,5 @@
-Algorithms: Project #1
-Nathan Stackpole
+#Algorithms: Project #1
+##Nathan Stackpole
 
 This project contains 3 files: BinaryInteger.cpp, BinaryInteger.hpp, and main.cpp
 
