@@ -1,2 +1,0 @@
-/home/nathan/Algorithms/Project1/build/CMakeFiles/printout.dir
-/home/nathan/Algorithms/Project1/build/CMakeFiles/binary-integer-test.dir
