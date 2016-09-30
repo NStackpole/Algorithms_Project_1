@@ -9,73 +9,79 @@
 #define BINARYINTEGER
 
 class binary_integer{
-	public:
+    public:
 
-	//Array member, holds the bits.
-	std::vector<int> bits; 
+    //Array member, holds the bits.
+    std::vector<int> bits; 
 
-	//Default constructor, fills the array with zeroes.
-	binary_integer();
+    std::vector<int> convert_to_binary(unsigned);
 
-	//Copy constructor.
-	binary_integer(binary_integer const&);
+    //Default constructor, fills the array with zeroes.
+    binary_integer();
 
-	//Contructor that takes an unsigned int and initializes the number to the binary representation of that number.
-	binary_integer(unsigned);
+    //Copy constructor.
+    binary_integer(binary_integer const&);
 
-	//Overloading arithmetic operators
+    //Contructor that takes an unsigned int and initializes the number to the binary representation of that number.
+    binary_integer(unsigned);
 
-	binary_integer& operator = (binary_integer const& );
+    //Overloading arithmetic operators
 
-	binary_integer& operator += (binary_integer const& );
+    binary_integer& operator = (binary_integer const&);
 
-	binary_integer& operator -= (binary_integer const& );
+    binary_integer& operator += (binary_integer const&);
 
-	binary_integer& operator *= (binary_integer const& );
+    binary_integer& operator -= (binary_integer const&);
 
-	binary_integer& operator /= (binary_integer const& );
+    binary_integer& operator *= (binary_integer const&);
 
-	std::vector<int> convert_to_binary(unsigned);
+    binary_integer& operator /= (binary_integer const&);
 
-	void printBits();
+    binary_integer& operator %= (binary_integer const&);
 
-	void printBitsWithZeroes();
+    
 
-	void printDecimal();
+    void print_bits();
 
-	std::vector<int> addBits(int, int, int);
+    void print_bits_with_zeroes();
 
-	void twice();
-	void half();
+    void print_decimal();
 
-	binary_integer& operator << (unsigned);
-	binary_integer& operator >> (unsigned);
+    std::vector<int> add_bits(int, int, int);
+
+    void twice();
+    void half();
+
+    binary_integer& operator << (unsigned);
+    binary_integer& operator >> (unsigned);
 };
 
-	//More arithmetic operator overloads
-	binary_integer operator + (binary_integer, binary_integer );
+    //More arithmetic operator overloads
+    binary_integer operator + (binary_integer, binary_integer);
 
-	binary_integer operator - (binary_integer, binary_integer );
+    binary_integer operator % (binary_integer, binary_integer);
 
-	binary_integer operator * (binary_integer, binary_integer );
+    binary_integer operator - (binary_integer, binary_integer);
 
-	binary_integer operator / (binary_integer, binary_integer );
+    binary_integer operator * (binary_integer, binary_integer);
 
-	//Output and input operator overloads
-	inline std::ostream& operator << (std::ostream& outstream, binary_integer& output)
-	{
-		output.printBits();
-	}
+    binary_integer operator / (binary_integer, binary_integer);
 
-	std::istream& operator >> (std::istream& ,  binary_integer& );
+    //Output and input operator overloads
+    inline std::ostream& operator << (std::ostream& outstream, binary_integer& output)
+    {
+        output.print_bits();
+    }
+
+    std::istream& operator >> (std::istream& ,  binary_integer&);
 
 
-	//boolean operator overloads 		  
-	bool operator >= (binary_integer const& , binary_integer const& );
-	bool operator < (binary_integer const& , binary_integer const& );
-	bool operator > (binary_integer const& , binary_integer const&);
-	bool operator <= (binary_integer const& , binary_integer const& );
-	bool operator == (binary_integer const& , binary_integer const&);
-	bool operator != (binary_integer const& , binary_integer const& ); 
+    //boolean operator overloads           
+    bool operator >= (binary_integer const& , binary_integer const&);
+    bool operator < (binary_integer const& , binary_integer const&);
+    bool operator > (binary_integer const& , binary_integer const&);
+    bool operator <= (binary_integer const& , binary_integer const&);
+    bool operator == (binary_integer const& , binary_integer const&);
+    bool operator != (binary_integer const& , binary_integer const&); 
 
 #endif

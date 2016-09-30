@@ -1,23 +1,24 @@
 #include "BinaryInteger.hpp"
 
-//Default Constructor
+//Default Constructor. Filles bits with 0's'
 binary_integer::binary_integer()
 {
     bits = std::vector<int>(2048, 0);
 }
 
-
+//Copy constructor
 binary_integer::binary_integer(binary_integer const& x)
 {
     bits = x.bits;
 }
 
+//contructor that takes an unsigned int and fills bits with its binary representation
 binary_integer::binary_integer(unsigned x)
 {
     bits = convert_to_binary(x);
 }
 
-//
+//converts an unsigned int to binary, putting it in the right format to be inserted into bits.
 std::vector<int> binary_integer::convert_to_binary(unsigned value)
 {
     std::vector<int> ans(2048, 0);
@@ -34,8 +35,9 @@ std::vector<int> binary_integer::convert_to_binary(unsigned value)
     return ans;
 }
 
+//Prints only the significant ints from bits (only the first 1 and all bits after it.)
 //Runs in O(n) time since it is printing n (size of list) digits.
-void binary_integer::printBits()
+void binary_integer::print_bits()
 {
     bool first_one_found = false;
 
@@ -53,8 +55,9 @@ void binary_integer::printBits()
     std::cout<<"\n";
 }
 
+//Prints *all* of the ints in bits.
 //Runs in O(n) time since it is printing n (size of list) digits.
-void binary_integer::printBitsWithZeroes()
+void binary_integer::print_bits_with_zeroes()
 {
 
     for(int i = bits.size() -1; i>=0; i--)
@@ -65,7 +68,8 @@ void binary_integer::printBitsWithZeroes()
     std::cout<<"\n";
 }
 
-void binary_integer::printDecimal()
+//Prints the base 10 representation of this binary number represented by bits
+void binary_integer::print_decimal()
 {
     int answer =0;
     for(int i = 0; i<bits.size(); ++i)
@@ -77,24 +81,28 @@ void binary_integer::printDecimal()
     std::cout<<answer<<"\n";
 }
 
+//Doubles this binary_integer using the left shift operator
 void binary_integer::twice()
 {
     *this<<1;
 }
 
+//Halves this binary_integer using the right shift operator.
 void binary_integer::half()
 {
     *this>>1;
 }
 
 //Overloading the equals assignment operator
+//Assigns this.bits to R.bits, effectively making this binary_integer a copy of R.
 binary_integer& binary_integer::operator = (binary_integer const& R)
 {
     bits = R.bits;
     return *this;
 }
 
-//Arithmetic Operators' overloads
+//Overload of the += operator
+//Adds this binary_integer to another binary_integer
 binary_integer& binary_integer::operator += (binary_integer const& R)
 {
 
@@ -103,7 +111,7 @@ binary_integer& binary_integer::operator += (binary_integer const& R)
 
     for(int i = 0; i<bits.size(); ++i)
     {
-        sum = addBits(bits[i], R.bits[i], carry);
+        sum = add_bits(bits[i], R.bits[i], carry);
         bits[i] = sum[0];
         carry = sum[1];
     }
@@ -111,8 +119,9 @@ binary_integer& binary_integer::operator += (binary_integer const& R)
     return *this;
 }
 
+//Helper function for the overload of the addition operators
 //returns an array of two ints in this format {sum, carry}
-std::vector<int> binary_integer::addBits(int bit_a, int bit_b, int carry)
+std::vector<int> binary_integer::add_bits(int bit_a, int bit_b, int carry)
 {
 
     std::vector<int> ans(2,0);
@@ -129,7 +138,8 @@ std::vector<int> binary_integer::addBits(int bit_a, int bit_b, int carry)
     return ans;
 }
 
-
+//Overloading of the left shift operator
+//Shifts all bits to the left rhs times. Effectively multipilies bits by 2^rhs
 binary_integer& binary_integer::operator << (unsigned rhs)
 {
     for(int j = 0; j<rhs;++j)
@@ -143,6 +153,8 @@ binary_integer& binary_integer::operator << (unsigned rhs)
     }
 }
 
+//Overloading of the right shift operator
+//Shifts all bits to the right rhs times. Effectively divides bits by 2^rhs
 binary_integer& binary_integer::operator >> (unsigned rhs)
 {
     for(int j = 0; j<rhs;++j)
@@ -152,17 +164,19 @@ binary_integer& binary_integer::operator >> (unsigned rhs)
         {
             temp[i] = bits[i+1];
         }
+
     bits = temp;
     }
 }
 
-
+//Overloading of the subtraction operator
 binary_integer& binary_integer::operator -= (binary_integer const& R)
 {
 
     return *this;
 }
 
+//overloading of the multiplication operator
 binary_integer& binary_integer::operator *=(binary_integer const& R)
 {
     for(int i = 0; i<bits.size(); ++i)
@@ -178,10 +192,23 @@ binary_integer& binary_integer::operator *=(binary_integer const& R)
     return *this;
 }
 
+//overloading of the division operator
 binary_integer& binary_integer::operator /=(binary_integer const& R)
 {
 
     return *this;
+}
+
+//overloading of the modulus operator
+binary_integer& binary_integer::operator %= (binary_integer const& R)
+{
+    return *this;
+}
+
+
+binary_integer operator %(binary_integer a, binary_integer b)
+{
+    return a %= b;
 }
 
 binary_integer operator /(binary_integer a, binary_integer b)
@@ -205,12 +232,10 @@ binary_integer operator *(binary_integer a, binary_integer b)
 }
 
 
-
+//overloading of the istream operator
 std::istream& operator >> (std::istream& inputstream,  binary_integer& input)
 {
-    input.bits = std::vector<int>(2048, 0);
-    for(int i = 0; i<5; ++i)
-        inputstream >> input.bits[i];
+    
 
 }
 
@@ -254,6 +279,7 @@ bool operator >= (binary_integer const& a, binary_integer const& b)
 
     if(a == b)
         return true;
+        
     for(int i = 2047; i>=0; --i)
     {
         if(a.bits[i] > b.bits[i])
