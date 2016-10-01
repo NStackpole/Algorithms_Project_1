@@ -95,15 +95,15 @@ void binary_integer::half()
 
 //Overloading the equals assignment operator
 //Assigns this.bits to R.bits, effectively making this binary_integer a copy of R.
-binary_integer& binary_integer::operator = (binary_integer const& R)
+binary_integer& binary_integer::operator = (binary_integer const& rhs)
 {
-    bits = R.bits;
+    bits = rhs.bits;
     return *this;
 }
 
 //Overload of the += operator
 //Adds this binary_integer to another binary_integer
-binary_integer& binary_integer::operator += (binary_integer const& R)
+binary_integer& binary_integer::operator += (binary_integer const& rhs)
 {
 
     int carry = 0;
@@ -111,7 +111,7 @@ binary_integer& binary_integer::operator += (binary_integer const& R)
 
     for(int i = 0; i<bits.size(); ++i)
     {
-        sum = add_bits(bits[i], R.bits[i], carry);
+        sum = add_bits(bits[i], rhs.bits[i], carry);
         bits[i] = sum[0];
         carry = sum[1];
     }
@@ -170,18 +170,45 @@ binary_integer& binary_integer::operator >> (unsigned rhs)
 }
 
 //Overloading of the subtraction operator
-binary_integer& binary_integer::operator -= (binary_integer const& R)
+binary_integer& binary_integer::operator -= (binary_integer const& rhs)
 {
+    assert(rhs<=*this);
+    int borrow = 0;
+    std::vector<int> bit_diff(2,0);
+
+    for(int i = 0; i<bits.size(); ++i)
+    {
+        bit_diff = subtract_bits(bits[i], rhs.bits[i], borrow);
+        bits[i] = bit_diff[0];
+        borrow = bit_diff[1];
+    }
 
     return *this;
 }
 
+std::vector<int> binary_integer::subtract_bits(int top_bit, int bottom_bit, int borrow)
+{
+    std::vector<int> ans(2,0);
+    bottom_bit += borrow;
+    
+    if(top_bit < bottom_bit)
+    {
+        ans[1] = 1;
+        top_bit += 2;
+    }
+
+    ans[0] = top_bit - bottom_bit;
+    
+    return ans;
+}
+
+
 //overloading of the multiplication operator
-binary_integer& binary_integer::operator *=(binary_integer const& R)
+binary_integer& binary_integer::operator *=(binary_integer const& rhs)
 {
     for(int i = 0; i<bits.size(); ++i)
     {
-        if(R.bits[i]%2 == 0)
+        if(rhs.bits[i]%2 == 0)
         {
             
         }
@@ -193,42 +220,42 @@ binary_integer& binary_integer::operator *=(binary_integer const& R)
 }
 
 //overloading of the division operator
-binary_integer& binary_integer::operator /=(binary_integer const& R)
+binary_integer& binary_integer::operator /=(binary_integer const& rhs)
 {
 
     return *this;
 }
 
 //overloading of the modulus operator
-binary_integer& binary_integer::operator %= (binary_integer const& R)
+binary_integer& binary_integer::operator %= (binary_integer const& rhs)
 {
     return *this;
 }
 
 
-binary_integer operator %(binary_integer a, binary_integer b)
+binary_integer operator %(binary_integer lhs, binary_integer rhs)
 {
-    return a %= b;
+    return lhs %= rhs;
 }
 
-binary_integer operator /(binary_integer a, binary_integer b)
+binary_integer operator /(binary_integer lhs, binary_integer rhs)
 {
-    return a /= b;
+    return lhs /= rhs;
 }
 
-binary_integer operator +(binary_integer a, binary_integer b)
+binary_integer operator +(binary_integer lhs, binary_integer rhs)
 {
-    return a += b;
+    return lhs += rhs;
 }
 
-binary_integer operator - (binary_integer a, binary_integer b)
+binary_integer operator - (binary_integer lhs, binary_integer rhs)
 {
-    return a -= b;
+    return lhs -= rhs;
 }
 
-binary_integer operator *(binary_integer a, binary_integer b)
+binary_integer operator *(binary_integer lhs, binary_integer rhs)
 {
-    return a *= b;
+    return lhs *= rhs;
 }
 
 
@@ -240,52 +267,74 @@ std::istream& operator >> (std::istream& inputstream,  binary_integer& input)
 }
 
 //Boolean Operators' overloads
-bool operator == (binary_integer const& a, binary_integer const& b)
+bool operator == (binary_integer const& lhs, binary_integer const& rhs)
 {
-    return (a.bits == b.bits);
+    return (lhs.bits == rhs.bits);
 }
 
-bool operator != (binary_integer const& a, binary_integer const& b)
+bool operator != (binary_integer const& lhs, binary_integer const& rhs)
 {
-    return !(a.bits == b.bits);
+    return !(lhs.bits == rhs.bits);
 }
 
-bool operator < (binary_integer const& a, binary_integer const& b)
-{
-    return !(a>=b);
-}
-
-//This  function should run in O(n) time where n is the 2048
-bool operator >(binary_integer const& a, binary_integer const& b)
+bool operator < (binary_integer const& lhs, binary_integer const& rhs)
 {
     for(int i = 2047; i>=0; --i)
     {
-        if(a.bits[i] > b.bits[i])
-        return true;
+        if( rhs.bits[i] > lhs.bits[i])
+            return true;
+        if(lhs.bits[i] > rhs.bits[i])
+            return false;
+    }
+
+    return false;
+    
+}
+
+//This  function should run in O(n) time where n is the 2048
+bool operator >(binary_integer const& lhs, binary_integer const& rhs)
+{
+    for(int i = 2047; i>=0; --i)
+    {
+        if( rhs.bits[i] > lhs.bits[i])
+            return false;
+        if(lhs.bits[i] > rhs.bits[i])
+            return true;
     }
 
     return false;
 }
 
-bool operator <= (binary_integer const& a, binary_integer const& b)
+bool operator <= (binary_integer const& lhs, binary_integer const& rhs)
 {
-    if(a==b)
-        return true;
-    return !(a>=b);
-}
-
-bool operator >= (binary_integer const& a, binary_integer const& b)
-{
-
-    if(a == b)
+    if(lhs == rhs)
         return true;
         
     for(int i = 2047; i>=0; --i)
     {
-        if(a.bits[i] > b.bits[i])
-        return true;
+        if(rhs.bits[i] > lhs.bits[i])
+            return true;
+        if(lhs.bits[i] > rhs.bits[i])
+            return false;
     }
 
     return false;
+}
+
+bool operator >= (binary_integer const& lhs, binary_integer const& rhs)
+{
+    if(lhs == rhs)
+        return true;
+        
+    for(int i = 2047; i>=0; --i)
+    {
+        if( rhs.bits[i] > lhs.bits[i])
+            return false;
+        if(lhs.bits[i] > rhs.bits[i])
+            return true;
+    }
+
+    return true;
+    
 }
 

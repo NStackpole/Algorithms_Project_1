@@ -39,7 +39,7 @@ class binary_integer{
 
     binary_integer& operator %= (binary_integer const&);
 
-    
+    std::vector<int> subtract_bits(int, int, int);
 
     void print_bits();
 

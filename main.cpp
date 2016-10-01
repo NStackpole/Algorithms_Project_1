@@ -6,17 +6,17 @@ int main()
     Test1.print_bits();
     Test1.print_decimal();
 
-    binary_integer Test2 = binary_integer(2600);
+    binary_integer Test2 = binary_integer(6500);
     Test2.print_bits();
     Test2.print_decimal();
 
     std::cout<<"\n";
 
-    binary_integer Test3 = binary_integer(600);
+    binary_integer Test3 = binary_integer(7500);
     Test3.print_bits();
     Test3.print_decimal();
 
-    std::cout<<"\n";
+    std::cout<<"Addition testing\n";
 
     //Test2 += Test3;
 
@@ -29,6 +29,7 @@ int main()
     Test2.print_decimal();
     std::cout<<"Test3 is ";
     Test3.print_decimal();
+
 
     if(Test2 == Test3)
         std::cout<<"Test2 is Equal To Test3\n";
@@ -56,7 +57,7 @@ int main()
     else
         std::cout<<"Test2 is Not Greater Than Test3\n";
 
-    std::cout<<"\n";
+    std::cout<<"Bit shift testing\n";
 
     std::cout<<Test2;
     Test2.print_decimal();
@@ -82,7 +83,23 @@ int main()
     Test2.half();
     std::cout<<"\n";
 
-    std::cout<<Test2;
+    std::cout<<"Test 2:"<<Test2;
+    Test2.print_decimal();
+
+     
+
+    std::cout<<"\n";
+
+    std::cout<<"Subtraction testing\n";
+    std::cout<<"Test 2:"<<Test2;
+    Test2.print_decimal();
+    std::cout<<"Test 3:"<<Test3;
+    Test3.print_decimal();
+
+
+    Test2 -= Test3;
+
+    std::cout<<"Test 2:"<<Test2;
     Test2.print_decimal();
 
     //std::cin>>Test2;
