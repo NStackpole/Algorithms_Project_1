@@ -6,7 +6,7 @@ int main()
     Test1.print_bits();
     Test1.print_decimal();
 
-    binary_integer Test2 = binary_integer(6500);
+    binary_integer Test2 = binary_integer(100000);
     Test2.print_bits();
     Test2.print_decimal();
 
@@ -102,6 +102,46 @@ int main()
     std::cout<<"Test 2:"<<Test2;
     Test2.print_decimal();
 
+    std::cout<<"Modulus Test\n";
+    binary_integer ModulusTest1 = binary_integer(0);
+    std::cout<<"ModulusTest1:"<<ModulusTest1;
+
+    binary_integer ModulusTest2 = binary_integer(2);
+    std::cout<<"ModulusTest2:"<<ModulusTest2;
+    
+    ModulusTest1 %= ModulusTest2;
+    std::cout<<"ModulusTest1 % ModulusTest2 = "<<ModulusTest1;
+
+    std::cout<<"Division testing\n";
+
+    binary_integer DivisionTest1 = binary_integer(2);
+    std::cout<<"DivisionTest1:"<<DivisionTest1;
+    DivisionTest1.print_decimal();
+
+    binary_integer DivisionTest2 = binary_integer(2);
+    std::cout<<"DivisionTest2:"<<DivisionTest2;
+    DivisionTest2.print_decimal();
+
+    DivisionTest1 /= DivisionTest2;
+    std::cout<<"DivisionTest1 / DivisionTest2 = "<<DivisionTest1;
+    DivisionTest1.print_decimal();
+    
+  
+
+
+    std::cout<<"Multiplication by factor of two test\n";
+
+    binary_integer MultiplyTest1= binary_integer(120);
+    std::cout<<"MultiplyTest1:"<<MultiplyTest1;
+    MultiplyTest1.print_decimal();
+    
+    binary_integer MultiplyTest2 = binary_integer(80); 
+    std::cout<<"MultiplyTest2:"<<MultiplyTest2;
+    MultiplyTest2.print_decimal();
+
+    MultiplyTest1 *= MultiplyTest2;
+    std::cout<<"MultiplyTest1 * MultiplyTest2 = "<<MultiplyTest1;
+    MultiplyTest1.print_decimal();
     //std::cin>>Test2;
    
     

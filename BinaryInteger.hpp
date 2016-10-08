@@ -49,6 +49,8 @@ class binary_integer{
 
     std::vector<int> add_bits(int, int, int);
 
+    unsigned convert_to_decimal() const;
+
     void twice();
     void half();
 

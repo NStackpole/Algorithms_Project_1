@@ -22,6 +22,9 @@ binary_integer::binary_integer(unsigned x)
 std::vector<int> binary_integer::convert_to_binary(unsigned value)
 {
     std::vector<int> ans(2048, 0);
+    if(value == 0)
+        return ans;
+
     int count = 0;
 
     while(value != 1)
@@ -71,14 +74,19 @@ void binary_integer::print_bits_with_zeroes()
 //Prints the base 10 representation of this binary number represented by bits
 void binary_integer::print_decimal()
 {
-    int answer =0;
+    std::cout<<convert_to_decimal()<<"\n";
+}
+
+unsigned binary_integer::convert_to_decimal() const
+{
+    unsigned answer =0;
     for(int i = 0; i<bits.size(); ++i)
     {
         if(bits[i] == 1)
             answer+= bits[i] * pow(2,i);
     }
 
-    std::cout<<answer<<"\n";
+    return answer;
 }
 
 //Doubles this binary_integer using the left shift operator
@@ -121,6 +129,7 @@ binary_integer& binary_integer::operator += (binary_integer const& rhs)
 
 //Helper function for the overload of the addition operators
 //returns an array of two ints in this format {sum, carry}
+//Asymptotic run time is O(1), constant time, since there are no loops, only addition, comparisons, and the allocation of an array with 2 ints. 
 std::vector<int> binary_integer::add_bits(int bit_a, int bit_b, int carry)
 {
 
@@ -140,6 +149,8 @@ std::vector<int> binary_integer::add_bits(int bit_a, int bit_b, int carry)
 
 //Overloading of the left shift operator
 //Shifts all bits to the left rhs times. Effectively multipilies bits by 2^rhs
+//This function with run in O(rhs * 2046) or, simplified, O(n) where n=rhs.
+//The outer loop runs rhs times, and the inner loop always runs 2046 times (from 1 to 2047)
 binary_integer& binary_integer::operator << (unsigned rhs)
 {
     for(int j = 0; j<rhs;++j)
@@ -155,6 +166,8 @@ binary_integer& binary_integer::operator << (unsigned rhs)
 
 //Overloading of the right shift operator
 //Shifts all bits to the right rhs times. Effectively divides bits by 2^rhs
+//This function with run in O(rhs * 2046) or, simplified, O(n) where n=rhs.
+//The outer loop runs rhs times, and the inner loop always runs 2046 times (from 2046 to 0)
 binary_integer& binary_integer::operator >> (unsigned rhs)
 {
     for(int j = 0; j<rhs;++j)
@@ -170,6 +183,7 @@ binary_integer& binary_integer::operator >> (unsigned rhs)
 }
 
 //Overloading of the subtraction operator
+//Due to the for loop, 
 binary_integer& binary_integer::operator -= (binary_integer const& rhs)
 {
     assert(rhs<=*this);
@@ -186,6 +200,8 @@ binary_integer& binary_integer::operator -= (binary_integer const& rhs)
     return *this;
 }
 
+//Helper function for binary_integer subtraction. Subtracts two bits while taking into consideration an borrow. Returns the difference and the borrow.
+//Runs in O(1) constant time since there are all operations within the function are constant.
 std::vector<int> binary_integer::subtract_bits(int top_bit, int bottom_bit, int borrow)
 {
     std::vector<int> ans(2,0);
@@ -206,29 +222,72 @@ std::vector<int> binary_integer::subtract_bits(int top_bit, int bottom_bit, int 
 //overloading of the multiplication operator
 binary_integer& binary_integer::operator *=(binary_integer const& rhs)
 {
-    for(int i = 0; i<bits.size(); ++i)
-    {
-        if(rhs.bits[i]%2 == 0)
-        {
-            
-        }
+    if(*this == binary_integer(0) || rhs == binary_integer(1))
+        return *this;
 
-    
+    binary_integer rhs_copy = binary_integer();
+    rhs_copy.bits = rhs.bits;
+    binary_integer z = *this * (rhs/binary_integer(2));
+    if(rhs == binary_integer(0))
+    {
+        *this = binary_integer(0);
+        return *this;
     }
 
-    return *this;
+    else if (rhs%binary_integer(2) ==binary_integer(0))
+    {
+        z.twice();
+        *this = z;
+
+        return *this;
+    }
+
+    else
+    {
+        z.twice();
+        binary_integer ans = *this + (z);
+        *this = ans;
+        return *this;
+    }
 }
 
 //overloading of the division operator
 binary_integer& binary_integer::operator /=(binary_integer const& rhs)
 {
+    assert(rhs != binary_integer(0));
 
+    binary_integer binary_one = binary_integer(1);
+
+    if(*this == rhs)
+    {
+        *this = binary_integer(1);
+        return *this;
+    }
+
+    if(*this == binary_integer(0))
+        return *this;
+
+    if(rhs > *this)
+        *this = binary_integer(0);
+        
+    else
+    {
+        binary_integer rhs_copy = rhs;
+        binary_integer temp = *this;
+        *this = ((temp-rhs_copy)/rhs_copy) + binary_integer(1);
+    }
     return *this;
 }
 
 //overloading of the modulus operator
 binary_integer& binary_integer::operator %= (binary_integer const& rhs)
 {
+    if(*this < rhs)
+        return *this;
+    *this = (*this-rhs);
+    
+    *this%=rhs;
+
     return *this;
 }
 
