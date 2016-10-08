@@ -75,7 +75,7 @@ class binary_integer{
         output.print_bits();
     }
 
-    std::istream& operator >> (std::istream& ,  binary_integer&);
+    std::istream& operator >> (std::istream& , binary_integer&);
 
 
     //boolean operator overloads           

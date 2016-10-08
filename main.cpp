@@ -142,9 +142,14 @@ int main()
     MultiplyTest1 *= MultiplyTest2;
     std::cout<<"MultiplyTest1 * MultiplyTest2 = "<<MultiplyTest1;
     MultiplyTest1.print_decimal();
-    //std::cin>>Test2;
-   
     
+    std::cout<<"Input Testing:\n";
+    
+    std::cout<<"Input a binary number with less than 2048 bits:";
+    std::cin>>Test2;
+   
+    std::cout<<Test2;
+    Test2.print_decimal();
 
 
     //std::cout<<"\n";

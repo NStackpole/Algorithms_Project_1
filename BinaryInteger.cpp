@@ -319,10 +319,38 @@ binary_integer operator *(binary_integer lhs, binary_integer rhs)
 
 
 //overloading of the istream operator
+
 std::istream& operator >> (std::istream& inputstream,  binary_integer& input)
 {
-    
+    std::string bit_string;
+    inputstream >> bit_string;
 
+    if(bit_string.size() > 2048)
+    {
+        std::cout<<"You entered a string of more than 2048 digits, function returned without assigning any values.\n";
+        return inputstream;
+    }
+
+    std::vector<int> temp_input(2048,0); 
+    int input_index = 0 + bit_string.size()-1;
+    for(int i = 0; i<bit_string.size(); ++i)
+    {
+        
+        if(bit_string.at(i) == '0')
+            temp_input[input_index] = 0;
+        else if (bit_string.at(i) == '1')
+            temp_input[input_index] = 1;
+        else
+        {
+            std::cout<<"You entered a digit besides a 1 or a 0, function returned without assigning any values. \n";
+            return inputstream;
+        }
+
+        input_index -=1;
+        
+    }
+    input.bits = temp_input;
+    return inputstream;
 }
 
 //Boolean Operators' overloads
