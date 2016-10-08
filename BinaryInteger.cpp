@@ -111,6 +111,7 @@ binary_integer& binary_integer::operator = (binary_integer const& rhs)
 
 //Overload of the += operator
 //Adds this binary_integer to another binary_integer
+//Performs a worst case of (6+1) * 2048 = 7 * 2048 or 7 * n digit operations.
 binary_integer& binary_integer::operator += (binary_integer const& rhs)
 {
 
@@ -129,6 +130,7 @@ binary_integer& binary_integer::operator += (binary_integer const& rhs)
 
 //Helper function for the overload of the addition operators
 //returns an array of two ints in this format {sum, carry}
+//Performs a worst cast of 6 operations.
 //Asymptotic run time is O(1), constant time, since there are no loops, only addition, comparisons, and the allocation of an array with 2 ints. 
 std::vector<int> binary_integer::add_bits(int bit_a, int bit_b, int carry)
 {
@@ -149,7 +151,8 @@ std::vector<int> binary_integer::add_bits(int bit_a, int bit_b, int carry)
 
 //Overloading of the left shift operator
 //Shifts all bits to the left rhs times. Effectively multipilies bits by 2^rhs
-//This function with run in O(rhs * 2046) or, simplified, O(n) where n=rhs.
+//Performs rhs * 2047 or rhs * (n-1) digit operations.
+//This function with run in O(rhs * 2047) or, simplified, O(n) where n=rhs.
 //The outer loop runs rhs times, and the inner loop always runs 2046 times (from 1 to 2047)
 binary_integer& binary_integer::operator << (unsigned rhs)
 {
@@ -160,13 +163,15 @@ binary_integer& binary_integer::operator << (unsigned rhs)
         {
             temp[i] = bits[i-1];
         }
-    bits = temp;
+        
+        bits = temp;
     }
 }
 
 //Overloading of the right shift operator
 //Shifts all bits to the right rhs times. Effectively divides bits by 2^rhs
-//This function with run in O(rhs * 2046) or, simplified, O(n) where n=rhs.
+//Performs rhs * 2047 or rhs * (n-1) digit operations.
+//This function with run in O(rhs * 2047) or, simplified, O(n) where n=rhs.
 //The outer loop runs rhs times, and the inner loop always runs 2046 times (from 2046 to 0)
 binary_integer& binary_integer::operator >> (unsigned rhs)
 {
@@ -183,7 +188,7 @@ binary_integer& binary_integer::operator >> (unsigned rhs)
 }
 
 //Overloading of the subtraction operator
-//Due to the for loop, 
+//Performs a worst case 2048 * (3 + 1) or n*4 digit operations 
 binary_integer& binary_integer::operator -= (binary_integer const& rhs)
 {
     assert(rhs<=*this);
@@ -201,6 +206,7 @@ binary_integer& binary_integer::operator -= (binary_integer const& rhs)
 }
 
 //Helper function for binary_integer subtraction. Subtracts two bits while taking into consideration an borrow. Returns the difference and the borrow.
+//Performs 3 digit operations
 //Runs in O(1) constant time since there are all operations within the function are constant.
 std::vector<int> binary_integer::subtract_bits(int top_bit, int bottom_bit, int borrow)
 {
@@ -220,20 +226,25 @@ std::vector<int> binary_integer::subtract_bits(int top_bit, int bottom_bit, int 
 
 
 //overloading of the multiplication operator
+//performs the floor(log2(rhs)) recursions.
+//Performs worst case about n*2 + n + n + 7n + 4n - 1 = 15n -1 digit operations. This does not include the additional operations from recursion, and occurs when both
+// comparisons in the first if statement are made, and then the next two if statements are checked but are not true, and then the else statement is executed.
 binary_integer& binary_integer::operator *=(binary_integer const& rhs)
 {
     if(*this == binary_integer(0) || rhs == binary_integer(1))
         return *this;
 
-    binary_integer rhs_copy = binary_integer();
-    rhs_copy.bits = rhs.bits;
+    //n digit operations for the assignment.
     binary_integer z = *this * (rhs/binary_integer(2));
+
+    //This block performs 2n digit operations. n for the comparison and n for the assignment.
     if(rhs == binary_integer(0))
     {
         *this = binary_integer(0);
         return *this;
     }
 
+    //This block performs 8n-1 digit operations. 6n for the modulus operation, n for the comparison, n-1 for the twice(), and n for the assignment.
     else if (rhs%binary_integer(2) ==binary_integer(0))
     {
         z.twice();
@@ -242,6 +253,7 @@ binary_integer& binary_integer::operator *=(binary_integer const& rhs)
         return *this;
     }
 
+    //This block performs 4n-1 operations. n-1 for the twice(), n for the addition, n for the first assignment, and n for the last assignment.
     else
     {
         z.twice();
@@ -252,11 +264,10 @@ binary_integer& binary_integer::operator *=(binary_integer const& rhs)
 }
 
 //overloading of the division operator
+//Performs (*this-rhs)/rhs recursions.
 binary_integer& binary_integer::operator /=(binary_integer const& rhs)
 {
     assert(rhs != binary_integer(0));
-
-    binary_integer binary_one = binary_integer(1);
 
     if(*this == rhs)
     {
@@ -280,6 +291,8 @@ binary_integer& binary_integer::operator /=(binary_integer const& rhs)
 }
 
 //overloading of the modulus operator
+//Performs *this/rhs recursions if *this > rhs. 
+//Performs worst case n + n + 4n = 6n digit operations. n for the comparison, n for the assignment, and 4n for the subtraction. 
 binary_integer& binary_integer::operator %= (binary_integer const& rhs)
 {
     if(*this < rhs)
@@ -291,7 +304,7 @@ binary_integer& binary_integer::operator %= (binary_integer const& rhs)
     return *this;
 }
 
-
+//For analysis of runtime, see comments above the respective compound assignment overloads
 binary_integer operator %(binary_integer lhs, binary_integer rhs)
 {
     return lhs %= rhs;
@@ -319,7 +332,6 @@ binary_integer operator *(binary_integer lhs, binary_integer rhs)
 
 
 //overloading of the istream operator
-
 std::istream& operator >> (std::istream& inputstream,  binary_integer& input)
 {
     std::string bit_string;
@@ -354,16 +366,19 @@ std::istream& operator >> (std::istream& inputstream,  binary_integer& input)
 }
 
 //Boolean Operators' overloads
+//Pefroms n digit operations, one comparison for each bit in the vectors
 bool operator == (binary_integer const& lhs, binary_integer const& rhs)
 {
     return (lhs.bits == rhs.bits);
 }
 
+//Performs at worst case n digit operations if the vectors are of the same size and only the last elements are different in the vectors.
 bool operator != (binary_integer const& lhs, binary_integer const& rhs)
 {
     return !(lhs.bits == rhs.bits);
 }
 
+//Performs a worst case of 2n digit operations.
 bool operator < (binary_integer const& lhs, binary_integer const& rhs)
 {
     for(int i = 2047; i>=0; --i)
@@ -378,12 +393,13 @@ bool operator < (binary_integer const& lhs, binary_integer const& rhs)
     
 }
 
-//This  function should run in O(n) time where n is the 2048
+//This function should run in O(n) time where n is the 2048
+//Performs a worst case of 2n digit operations.
 bool operator >(binary_integer const& lhs, binary_integer const& rhs)
 {
     for(int i = 2047; i>=0; --i)
     {
-        if( rhs.bits[i] > lhs.bits[i])
+        if(rhs.bits[i] > lhs.bits[i])
             return false;
         if(lhs.bits[i] > rhs.bits[i])
             return true;
@@ -392,6 +408,7 @@ bool operator >(binary_integer const& lhs, binary_integer const& rhs)
     return false;
 }
 
+//Performs a worst case of about n + 2n digit operations. n for the first comparison of the two vectors, and then 2n for the worst case of the loop.
 bool operator <= (binary_integer const& lhs, binary_integer const& rhs)
 {
     if(lhs == rhs)
@@ -408,6 +425,7 @@ bool operator <= (binary_integer const& lhs, binary_integer const& rhs)
     return false;
 }
 
+//Performs a worst case of about n + 2n digit operations. n for the first comparison of the two vectors, and then 2n for the worst case of the loop.
 bool operator >= (binary_integer const& lhs, binary_integer const& rhs)
 {
     if(lhs == rhs)
