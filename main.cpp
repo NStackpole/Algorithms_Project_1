@@ -1,5 +1,7 @@
 #include "BinaryInteger.hpp"
 
+//Nathan Stackpole. Algorithms Project 1
+
 int main()
 {
     binary_integer Test1;
@@ -150,18 +152,7 @@ int main()
    
     std::cout<<Test2;
     Test2.print_decimal();
-
-
-    //std::cout<<"\n";
-
-//    Test2 << 2;
    
-    
-
-  //  Test2.printBits();
-    //Test2.printDecimal();
-
-    
 
     return 0;
 }

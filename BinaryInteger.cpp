@@ -1,24 +1,31 @@
 #include "BinaryInteger.hpp"
 
+//Nathan Stackpole. Algorithms Project 1
+
+
 //Default Constructor. Filles bits with 0's'
+//Performs n digit operations
 binary_integer::binary_integer()
 {
     bits = std::vector<int>(2048, 0);
 }
 
 //Copy constructor
+//Performs n digit operations.
 binary_integer::binary_integer(binary_integer const& x)
 {
     bits = x.bits;
 }
 
 //contructor that takes an unsigned int and fills bits with its binary representation
+//Performs n + (n + log2(n) + 1) = 2n + log2(n) + 1 digit operations
 binary_integer::binary_integer(unsigned x)
 {
     bits = convert_to_binary(x);
 }
 
 //converts an unsigned int to binary, putting it in the right format to be inserted into bits.
+//Performs n + log2(n) + 1 digit operations.
 std::vector<int> binary_integer::convert_to_binary(unsigned value)
 {
     std::vector<int> ans(2048, 0);
@@ -58,7 +65,7 @@ void binary_integer::print_bits()
     std::cout<<"\n";
 }
 
-//Prints *all* of the ints in bits.
+//Prints *all* of the ints in bits. Mostly for debuggin purposes
 //Runs in O(n) time since it is printing n (size of list) digits.
 void binary_integer::print_bits_with_zeroes()
 {
@@ -77,6 +84,7 @@ void binary_integer::print_decimal()
     std::cout<<convert_to_decimal()<<"\n";
 }
 
+//Converts the binary number represented by bits to base 10.
 unsigned binary_integer::convert_to_decimal() const
 {
     unsigned answer =0;
@@ -90,12 +98,14 @@ unsigned binary_integer::convert_to_decimal() const
 }
 
 //Doubles this binary_integer using the left shift operator
+//Performs n-1 bit operations
 void binary_integer::twice()
 {
     *this<<1;
 }
 
 //Halves this binary_integer using the right shift operator.
+//Performs n-1 bit operations
 void binary_integer::half()
 {
     *this>>1;
@@ -103,6 +113,7 @@ void binary_integer::half()
 
 //Overloading the equals assignment operator
 //Assigns this.bits to R.bits, effectively making this binary_integer a copy of R.
+//Performs n digit operations
 binary_integer& binary_integer::operator = (binary_integer const& rhs)
 {
     bits = rhs.bits;
@@ -111,7 +122,7 @@ binary_integer& binary_integer::operator = (binary_integer const& rhs)
 
 //Overload of the += operator
 //Adds this binary_integer to another binary_integer
-//Performs a worst case of (6+1) * 2048 = 7 * 2048 or 7 * n digit operations.
+//Performs a worst case of (6+1) * 2048 = (7 * 2048) or (7 * n) digit operations.
 binary_integer& binary_integer::operator += (binary_integer const& rhs)
 {
 
@@ -130,7 +141,7 @@ binary_integer& binary_integer::operator += (binary_integer const& rhs)
 
 //Helper function for the overload of the addition operators
 //returns an array of two ints in this format {sum, carry}
-//Performs a worst cast of 6 operations.
+//Performs a worst cast of 6 digit operations.
 //Asymptotic run time is O(1), constant time, since there are no loops, only addition, comparisons, and the allocation of an array with 2 ints. 
 std::vector<int> binary_integer::add_bits(int bit_a, int bit_b, int carry)
 {
@@ -227,8 +238,7 @@ std::vector<int> binary_integer::subtract_bits(int top_bit, int bottom_bit, int 
 
 //overloading of the multiplication operator
 //performs the floor(log2(rhs)) recursions.
-//Performs worst case about n*2 + n + n + 7n + 4n - 1 = 15n -1 digit operations. This does not include the additional operations from recursion, and occurs when both
-// comparisons in the first if statement are made, and then the next two if statements are checked but are not true, and then the else statement is executed.
+//Performs worst case about n*2 + n + n + 7n + 4n - 1 = 15n -1 digit operations.
 binary_integer& binary_integer::operator *=(binary_integer const& rhs)
 {
     if(*this == binary_integer(0) || rhs == binary_integer(1))
@@ -265,6 +275,7 @@ binary_integer& binary_integer::operator *=(binary_integer const& rhs)
 
 //overloading of the division operator
 //Performs (*this-rhs)/rhs recursions.
+//Performs a worst case of n + n + n + n + n + n + n = 7n digit operations
 binary_integer& binary_integer::operator /=(binary_integer const& rhs)
 {
     assert(rhs != binary_integer(0));
@@ -332,6 +343,7 @@ binary_integer operator *(binary_integer lhs, binary_integer rhs)
 
 
 //overloading of the istream operator
+//Performs n + ((bit_string.size() -1) * 1) + n = 2n + bit_string.size()-1 digit operations
 std::istream& operator >> (std::istream& inputstream,  binary_integer& input)
 {
     std::string bit_string;
@@ -344,7 +356,7 @@ std::istream& operator >> (std::istream& inputstream,  binary_integer& input)
     }
 
     std::vector<int> temp_input(2048,0); 
-    int input_index = 0 + bit_string.size()-1;
+    int input_index = bit_string.size()-1;
     for(int i = 0; i<bit_string.size(); ++i)
     {
         

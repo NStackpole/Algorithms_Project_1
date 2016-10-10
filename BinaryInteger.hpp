@@ -8,6 +8,8 @@
 #ifndef BINARYINTEGER
 #define BINARYINTEGER
 
+//Nathan Stackpole. Algorithms Project 1
+
 class binary_integer{
     public:
 
